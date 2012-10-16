@@ -17,7 +17,7 @@ describe "Static pages" do
     it_should_behave_like "all static pages"
     it { should_not have_selector('title', :text => '| Home') }
   end
-  
+
   describe "Help page" do
     before { visit help_path }
     let(:heading) { 'Help' }
@@ -55,5 +55,16 @@ describe "Static pages" do
     page.should have_selector 'title', :text => full_title('Sign up')
     click_link "sample app"
     page.should have_selector 'title', :text => full_title('')
+  end
+
+  describe "should not have link 'Sign up now!' when signed in" do
+    let(:user) { FactoryGirl.create(:user) }
+
+    before do
+      sign_in user
+      visit root_path
+    end
+
+    it { should_not have_link('Sign up now!') }
   end
 end
